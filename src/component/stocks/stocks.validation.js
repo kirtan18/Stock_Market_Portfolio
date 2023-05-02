@@ -43,5 +43,10 @@ module.exports = {
       category: Joi.string().valid('High', 'Low').required(),
       alertPrice: Joi.number().required(),
     })
+  },
+  deleteTrigger: {
+    params: Joi.object({
+      stockId: Joi.number().required()
+    })
   }
 };

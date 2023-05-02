@@ -1,0 +1,657 @@
+{
+  "info": {
+    "title": "Trend Finder Service",
+    "version": "0.0.1",
+    "description": "Trend Finder API documentation",
+    "termsOfService": "https://zuru.tech/terms",
+    "contact": {
+      "email": "apiteam@zuru.tech"
+    },
+    "license": {
+      "name": "Dreamcatcher license",
+      "url": "https://zuru.tech/Dreamcatcher/licenses/LICENSE.html"
+    }
+  },
+  "host": "localhost:3002",
+  "basePath": "/",
+  "apis": [
+    "./src/component/**/*.route.js"
+  ],
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "swagger": "2.0",
+  "paths": {
+    "/portfolio/stocks/searchStock": {
+      "get": {
+        "tags": [
+          "Stocks"
+        ],
+        "summary": "To return all available stocks name and symbol.",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "in": "query",
+            "required": true,
+            "name": "symbol",
+            "schema": {
+              "type": "string",
+              "example": "AFISX"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation.",
+            "schema": {
+              "$ref": "components/stocks/res.json#searchStock"
+            }
+          },
+          "400": {
+            "description": "Bad Request - validation error",
+            "schema": {
+              "$ref": "components/errorContracts.json#/ValidationErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "components/errorContracts.json#/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/portfolio/stocks/addStock/{userId}": {
+      "post": {
+        "tags": [
+          "Stocks"
+        ],
+        "summary": "Add new stock",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "in": "query",
+            "required": true,
+            "name": "symbol",
+            "schema": {
+              "type": "string",
+              "example": "AFISX"
+            }
+          },
+          {
+            "in": "path",
+            "required": true,
+            "name": "userId",
+            "schema": {
+              "type": "integer",
+              "example": 3
+            }
+          },
+          {
+            "in": "body",
+            "name": "stock",
+            "schema": {
+              "$ref": "components/stocks/req.json#addStock"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation.",
+            "schema": {
+              "$ref": "components/stocks/res.json#addStock"
+            }
+          },
+          "400": {
+            "description": "Bad Request - validation error",
+            "schema": {
+              "$ref": "components/errorContracts.json#/ValidationErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "components/errorContracts.json#/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/portfolio/stocks/stock-chart": {
+      "get": {
+        "tags": [
+          "Stocks"
+        ],
+        "summary": "To return all history of stock",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "in": "query",
+            "required": true,
+            "name": "symbol",
+            "schema": {
+              "type": "string",
+              "example": "AFISX"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation.",
+            "schema": {
+              "$ref": "components/stocks/res.json#stock-chart"
+            }
+          },
+          "400": {
+            "description": "Bad Request - validation error",
+            "schema": {
+              "$ref": "components/errorContracts.json#/ValidationErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "components/errorContracts.json#/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/portfolio/stocks/getStocks/{userId}": {
+      "get": {
+        "tags": [
+          "Stocks"
+        ],
+        "summary": "To return all existing stocks",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "in": "path",
+            "required": true,
+            "name": "userId",
+            "schema": {
+              "type": "integer",
+              "example": 3
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation.",
+            "schema": {
+              "$ref": "components/stocks/res.json#getStocks"
+            }
+          },
+          "400": {
+            "description": "Bad Request - validation error",
+            "schema": {
+              "$ref": "components/errorContracts.json#/ValidationErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "components/errorContracts.json#/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/portfolio/stocks/deleteStock/{userId}": {
+      "delete": {
+        "tags": [
+          "Stocks"
+        ],
+        "summary": "To delete stock",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "in": "path",
+            "required": true,
+            "name": "userId",
+            "schema": {
+              "type": "integer",
+              "example": 3
+            }
+          },
+          {
+            "in": "query",
+            "required": true,
+            "name": "symbol",
+            "schema": {
+              "type": "string",
+              "example": "AFISX"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation.",
+            "schema": {
+              "$ref": "components/stocks/res.json#deleteStock"
+            }
+          },
+          "400": {
+            "description": "Bad Request - validation error",
+            "schema": {
+              "$ref": "components/errorContracts.json#/ValidationErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "components/errorContracts.json#/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/portfolio/stocks/addTrigger/{stockId}": {
+      "post": {
+        "tags": [
+          "Stocks"
+        ],
+        "summary": "Add new trigger on stock",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "in": "path",
+            "required": true,
+            "name": "stockId",
+            "schema": {
+              "type": "integer",
+              "example": 3
+            }
+          },
+          {
+            "in": "body",
+            "schema": null,
+            "$ref": "components/stocks/req.json#addTrigger"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation.",
+            "schema": {
+              "$ref": "components/stocks/res.json#addTrigger"
+            }
+          },
+          "400": {
+            "description": "Bad Request - validation error",
+            "schema": {
+              "$ref": "components/errorContracts.json#/ValidationErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "components/errorContracts.json#/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/portfolio/stocks/getTriggers": {
+      "get": {
+        "tags": [
+          "Stocks"
+        ],
+        "summary": "Get all triggers",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation.",
+            "schema": {
+              "$ref": "components/stocks/res.json#getTriggers"
+            }
+          },
+          "400": {
+            "description": "Bad Request - validation error",
+            "schema": {
+              "$ref": "components/errorContracts.json#/ValidationErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "components/errorContracts.json#/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/portfolio/stocks/deleteTrigger": {
+      "delete": {
+        "tags": [
+          "Stocks"
+        ],
+        "summary": "Delete Trigger",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "in": "path",
+            "required": true,
+            "name": "stockId",
+            "schema": {
+              "type": "integer",
+              "example": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation.",
+            "schema": {
+              "$ref": "components/stocks/res.json#deleteTrigger"
+            }
+          },
+          "400": {
+            "description": "Bad Request - validation error",
+            "schema": {
+              "$ref": "components/errorContracts.json#/ValidationErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "components/errorContracts.json#/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/portfolio/users/register": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Register new user",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "user",
+            "schema": {
+              "$ref": "components/users/req.json#register"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation.",
+            "schema": {
+              "$ref": "components/users/res.json#register"
+            }
+          },
+          "400": {
+            "description": "Bad Request - validation error",
+            "schema": {
+              "$ref": "components/errorContracts.json#/ValidationErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "components/errorContracts.json#/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/portfolio/users/login": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Login user",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "user",
+            "schema": {
+              "$ref": "components/users/req.json#login"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation.",
+            "schema": {
+              "$ref": "components/users/res.json#login"
+            }
+          },
+          "400": {
+            "description": "Bad Request - validation error",
+            "schema": {
+              "$ref": "components/errorContracts.json#/ValidationErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "components/errorContracts.json#/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/portfolio/users/token": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Generate new token using refresh token",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "user",
+            "schema": {
+              "$ref": "components/users/req.json#token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation.",
+            "schema": {
+              "$ref": "components/users/res.json#token"
+            }
+          },
+          "400": {
+            "description": "Bad Request - validation error",
+            "schema": {
+              "$ref": "components/errorContracts.json#/ValidationErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "components/errorContracts.json#/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/portfolio/users/forgot": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Forgot password and sent mail for reset password",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "user",
+            "schema": {
+              "$ref": "components/users/req.json#forgot"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation.",
+            "schema": {
+              "$ref": "components/users/res.json#forgot"
+            }
+          },
+          "400": {
+            "description": "Bad Request - validation error",
+            "schema": {
+              "$ref": "components/errorContracts.json#/ValidationErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "components/errorContracts.json#/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/portfolio/users/reset": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Reset password",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "user",
+            "schema": {
+              "$ref": "components/users/res.json#reset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation.",
+            "schema": {
+              "$ref": "components/users/res.json#reset"
+            }
+          },
+          "400": {
+            "description": "Bad Request - validation error",
+            "schema": {
+              "$ref": "components/errorContracts.json#/ValidationErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "components/errorContracts.json#/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/portfolio/users/logout": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Logout user",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation.",
+            "schema": {
+              "$ref": "components/users/res.json#logout"
+            }
+          },
+          "400": {
+            "description": "Bad Request - validation error",
+            "schema": {
+              "$ref": "components/errorContracts.json#/ValidationErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "components/errorContracts.json#/ErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {},
+  "responses": {},
+  "parameters": {},
+  "securityDefinitions": {},
+  "tags": []
+}

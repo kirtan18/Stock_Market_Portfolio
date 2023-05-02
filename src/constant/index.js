@@ -4,10 +4,11 @@ module.exports = {
     UNIQUE_VIOLATION: '23505'
   },
   cronJobTime: {
+    // Cronjob call api every 1 minute
     time: '0 */1 * * * *',
   },
   smtpEthernal: {
-    user: 'ethan51@ethereal.email',
-    pass: 'X4DT1ddvP9tdBU6QtG'
+    user: 'lauretta.mayer@ethereal.email',
+    pass: 'smDFJKBgwvN8DYRe1t'
   }
 };

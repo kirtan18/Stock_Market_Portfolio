@@ -18,6 +18,7 @@ module.exports = {
 
     return result;
   },
+
   addStockService: async (userId, symbol, companyName) => {
     const dbClient = await dbConnPool.connect();
     try {
@@ -32,13 +33,20 @@ module.exports = {
       const high = Math.round(Number(data['Global Quote']['03. high']));
       const low = Math.round(Number(data['Global Quote']['04. low']));
 
-      const parameters = [userId, symbol, companyName, price, open, high, low];
-      const result = await stocksDal.addStockDal(dbClient, parameters);
+      const columns = {
+        userId, symbol, companyName, price, open, high, low
+      };
+      const isStockPresent = await stocksDal.isStockPresentDal(dbClient, userId, symbol);
+      if (isStockPresent) {
+        throw new Error('CONFLICT');
+      }
+      const result = await stocksDal.addStockDal(dbClient, columns);
       return result;
     } finally {
       dbClient.release();
     }
   },
+
   stockChartService: async (symbol) => {
     const URL = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${symbol}&TIME_SERIES_DAILY_ADJUSTED&apikey=${apiKey}`;
     const response = await fetch(URL);
@@ -48,48 +56,44 @@ module.exports = {
     }
     const storeData = [];
     const symbolName = data['Meta Data']['2. Symbol'];
-    // eslint-disable-next-line no-restricted-syntax, guard-for-in
-    for (const date in data['Time Series (Daily)']) {
-      const temp = { date, open: data['Time Series (Daily)'][date]['1. open'], close: data['Time Series (Daily)'][date]['4. close'] };
+    const timeSeries = data['Time Series (Daily)'];
+
+    Object.keys(timeSeries).forEach(date => {
+      const temp = { date, open: timeSeries[date]['1. open'], close: timeSeries[date]['4. close'] };
       storeData.push(temp);
-    }
-    const result = { symbolName, dateWise: storeData };
+    });
+    const result = [{ symbolName, dateWise: storeData }];
     return result;
   },
+
   getStocksService: async (userId) => {
     const dbClient = await dbConnPool.connect();
     try {
-      const parameter = [userId];
-      const result = await stocksDal.getStocksDal(dbClient, parameter);
-      return result.rows;
+      const result = await stocksDal.getStocksDal(dbClient, userId);
+      return result;
     } finally {
       dbClient.release();
     }
   },
+
   deleteStockService: async (userId, symbol) => {
     const dbClient = await dbConnPool.connect();
     try {
-      const parameters = [userId, symbol];
-      await stocksDal.deleteStockDal(dbClient, parameters);
+      await stocksDal.deleteStockDal(dbClient, userId, symbol);
     } finally {
       dbClient.release();
     }
   },
-  // getCurrentStockPrice: async (symbol) => {
-  //   const URL = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=${apiKey}`;
-  //   const response = await fetch(URL);
-  //   const data = await response.json();
-  //   return data['Global Quote']['05. price'];
-  // },
+
   addTriggerService: async (stockId, category, alertPrice) => {
     const dbClient = await dbConnPool.connect();
     try {
-      const parameters = [stockId, category, alertPrice];
-      await stocksDal.addTriggerDal(dbClient, parameters);
+      await stocksDal.addTriggerDal(dbClient, stockId, category, alertPrice);
     } finally {
       dbClient.release();
     }
   },
+
   getTriggersService: async () => {
     const dbClient = await dbConnPool.connect();
     try {
@@ -99,7 +103,8 @@ module.exports = {
       dbClient.release();
     }
   },
-  triggerPrice: async () => {
+
+  sendMailService: async () => {
     const dbClient = await dbConnPool.connect();
     try {
       const triggerData = await stocksDal.getTriggersDal(dbClient);
@@ -111,7 +116,6 @@ module.exports = {
           const URL = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=${apiKey}`;
           const response = await fetch(URL);
           const data = await response.json();
-          console.info(item);
           const currentStockPrice = Math.round(Number(data['Global Quote']['05. price']));
           const result = await helper.checkPrice(
             userName,
@@ -122,11 +126,23 @@ module.exports = {
             companyName,
           );
           if (result) {
-            const parameter = [stockId];
-            await stocksDal.deleteTriggerDal(dbClient, parameter);
+            await stocksDal.deleteTriggerDal(dbClient, stockId);
           }
         });
       }
+    } finally {
+      dbClient.release();
+    }
+  },
+
+  deleteTriggerService: async (stockId) => {
+    const dbClient = await dbConnPool.connect();
+    try {
+      const isTriggerPresent = stocksDal.isTriggerPresentDal(dbClient, stockId);
+      if (isTriggerPresent) {
+        throw new Error('USER_NOT_FOUND');
+      }
+      await stocksDal.deleteTriggerDal(dbClient, stockId);
     } finally {
       dbClient.release();
     }

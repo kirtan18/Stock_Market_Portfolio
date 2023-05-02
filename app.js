@@ -18,7 +18,7 @@ app.use((req, res, next) => {
 });
 
 // Routes
-app.use('/stock-portfolio', router);
+app.use('/portfolio', router);
 
 app.use('/docs', express.static('docs/api'));
 

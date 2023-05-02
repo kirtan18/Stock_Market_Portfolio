@@ -1,5 +1,19 @@
 module.exports = {
-  addStockDal: async (dbClient, parameters) => {
+  isStockPresentDal: async (dbClient, userId, symbol) => {
+    const sqlQuery = `
+    SELECT 
+      "userId", 
+      symbol 
+    FROM 
+      stocks 
+    WHERE 
+      "userId" = $1 AND symbol = $2
+    `;
+    const parameters = [userId, symbol];
+    const result = await dbClient.query(sqlQuery, parameters);
+    return result.rows;
+  },
+  addStockDal: async (dbClient, columns) => {
     const sqlQuery = `
     INSERT INTO stocks(
       "userId", symbol, "companyName", price, 
@@ -7,10 +21,20 @@ module.exports = {
     ) 
     VALUES 
       ($1, $2, $3, $4, $5, $6, $7)`;
+    const parameters = [
+      columns.userId,
+      columns.symbol,
+      columns.companyName,
+      columns.price,
+      columns.open,
+      columns.high,
+      columns.low
+    ];
     const result = await dbClient.query(sqlQuery, parameters);
-    return result;
+    return result.rows[0];
   },
-  getStocksDal: async (dbClient, parameter) => {
+
+  getStocksDal: async (dbClient, userId) => {
     const sqlQuery = `
     SELECT 
       stocks."stockId",
@@ -26,10 +50,12 @@ module.exports = {
     WHERE 
       stocks."userId" = $1;
     `;
+    const parameter = [userId];
     const result = await dbClient.query(sqlQuery, parameter);
-    return result;
+    return result.rows;
   },
-  deleteStockDal: async (dbClient, parameters) => {
+
+  deleteStockDal: async (dbClient, userId, symbol) => {
     const sqlQuery = `
     DELETE FROM 
       stocks 
@@ -38,10 +64,12 @@ module.exports = {
     AND   
       stocks.symbol = $2
     `;
+    const parameters = [userId, symbol];
     const result = await dbClient.query(sqlQuery, parameters);
-    return result;
+    return result.rows[0];
   },
-  addTriggerDal: async (dbClient, parameters) => {
+
+  addTriggerDal: async (dbClient, stockId, category, alertPrice) => {
     const sqlQuery = `
      INSERT INTO triggers(
         "stockId", "category", "alertPrice"
@@ -49,9 +77,11 @@ module.exports = {
       VALUES 
         ($1, $2, $3);
      `;
+    const parameters = [stockId, category, alertPrice];
     const result = await dbClient.query(sqlQuery, parameters);
-    return result;
+    return result.rows[0];
   },
+
   getTriggersDal: async (dbClient) => {
     const sqlQuery = `
     SELECT 
@@ -71,13 +101,27 @@ module.exports = {
     const result = await dbClient.query(sqlQuery);
     return result.rows;
   },
-  deleteTriggerDal: async (dbClient, parameter) => {
+  isTriggerPresentDal: async (dbClient, stockId) => {
+    const sqlQuery = `
+    SELECT 
+       "stockId" 
+    FROM 
+       triggers 
+    WHERE 
+       "stockId" = $1
+  `;
+    const parameter = [stockId];
+    const result = await dbClient.query(sqlQuery, parameter);
+    return result.rowCount;
+  },
+  deleteTriggerDal: async (dbClient, stockId) => {
     const sqlQuery = `
     DELETE FROM 
       triggers 
     WHERE 
       triggers."stockId" = $1;
     `;
+    const parameter = [stockId];
     const result = await dbClient.query(sqlQuery, parameter);
     return result.rows;
   }

@@ -11,6 +11,7 @@ module.exports = {
     port: process.env.DATABASE_PORT,
   },
   serverPort: process.env.SERVER_PORT,
-  tokenKey: process.env.TOKEN_KEY,
+  accessTokenSecret: process.env.ACCESS_TOKEN_SECRET,
+  refreshTokenSecret: process.env.REFRESH_TOKEN_SECRET,
   apiKey: process.env.API_KEY
 };

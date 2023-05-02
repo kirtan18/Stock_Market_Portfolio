@@ -16,7 +16,7 @@ module.exports = {
     const { companyName } = req.body;
     try {
       await stocksService.addStockService(userId, symbol, companyName);
-      res.status(200).json({ msg: 'Successfully New stock added' });
+      res.status(200).json({ message: 'Successfully New stock added' });
     } catch (error) {
       next(error);
     }
@@ -63,6 +63,15 @@ module.exports = {
     try {
       const responseBody = await stocksService.getTriggersService();
       res.status(200).json(responseBody);
+    } catch (error) {
+      next(error);
+    }
+  },
+  deleteTrigger: async (req, res, next) => {
+    const { stockId } = req.params;
+    try {
+      await stocksService.deleteTriggerService(stockId);
+      res.status(200).json({ message: 'Successfully Trigger Deleted' });
     } catch (error) {
       next(error);
     }

@@ -45,7 +45,14 @@ module.exports = {
     httpStatusCode: 404,
     body: {
       code: 'user_not_found',
-      message: 'Please write correct user details'
+      message: 'Please write correct details'
     }
-  }
+  },
+  DELIVERY_ERROR: {
+    httpStatusCode: 554,
+    body: {
+      code: 'Failed_to_sent_mail',
+      message: 'your message cannot be delivered'
+    }
+  },
 };

@@ -1,18 +1,22 @@
 const jwt = require('jsonwebtoken');
-const config = require('../../config/index');
+const { accessTokenSecret } = require('../../config/index');
 
-const verifyToken = (req, res, next) => {
-  const token = req.headers.authorization;
-  try {
-    if (!token) {
-      return next(new Error('BAD_REQUEST'));
+module.exports = {
+  auth: (req, res, next) => {
+    const token = req.headers.authorization;
+    try {
+      if (!token) {
+        throw new Error('FORBIDDEN');
+      }
+      jwt.verify(token, accessTokenSecret, (err, decoded) => {
+        if (err) {
+          next(new Error('UNAUTHORIZED'));
+        }
+        req.user = decoded;
+        next();
+      });
+    } catch (error) {
+      next(error);
     }
-    const decoded = jwt.verify(token, config.tokenKey);
-    req.user = decoded;
-  } catch (error) {
-    next(new Error('UNAUTHORIZED'));
   }
-  return next();
 };
-
-module.exports = { verifyToken };

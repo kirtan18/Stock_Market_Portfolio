@@ -2,9 +2,9 @@ const cron = require('node-cron');
 const stocksService = require('../component/stocks/stocks.service');
 const { cronJobTime } = require('../constant/index');
 
-const getEmail = async () => {
+const sendEmail = async () => {
   try {
-    await stocksService.triggerPrice();
+    await stocksService.sendMailService();
   } catch (error) {
     console.info(error);
   }
@@ -24,7 +24,7 @@ const scheduleJob = (tm, task) => {
 };
 
 const cronJob = () => {
-  const job = scheduleJob(cronJobTime.time, getEmail);
+  const job = scheduleJob(cronJobTime.time, sendEmail);
   return job;
 };
 

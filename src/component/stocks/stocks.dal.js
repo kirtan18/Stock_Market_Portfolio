@@ -11,7 +11,7 @@ module.exports = {
     `;
     const parameters = [userId, symbol];
     const result = await dbClient.query(sqlQuery, parameters);
-    return result.rows;
+    return result.rowCount;
   },
   addStockDal: async (dbClient, columns) => {
     const sqlQuery = `

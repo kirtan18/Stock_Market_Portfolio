@@ -79,6 +79,10 @@ module.exports = {
   deleteStockService: async (userId, symbol) => {
     const dbClient = await dbConnPool.connect();
     try {
+      const isStockPresent = await stocksDal.isStockPresentDal(dbClient, userId, symbol);
+      if (!isStockPresent) {
+        throw new Error('USER_NOT_FOUND');
+      }
       await stocksDal.deleteStockDal(dbClient, userId, symbol);
     } finally {
       dbClient.release();
@@ -138,8 +142,8 @@ module.exports = {
   deleteTriggerService: async (stockId) => {
     const dbClient = await dbConnPool.connect();
     try {
-      const isTriggerPresent = stocksDal.isTriggerPresentDal(dbClient, stockId);
-      if (isTriggerPresent) {
+      const isTriggerPresent = await stocksDal.isTriggerPresentDal(dbClient, stockId);
+      if (!isTriggerPresent) {
         throw new Error('USER_NOT_FOUND');
       }
       await stocksDal.deleteTriggerDal(dbClient, stockId);

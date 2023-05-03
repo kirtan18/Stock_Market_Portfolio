@@ -84,18 +84,18 @@ module.exports = {
 
   getTriggersDal: async (dbClient) => {
     const sqlQuery = `
-    SELECT 
+    SELECT
       triggers."triggerId",
-      triggers."stockId", 
-      triggers."category", 
-      triggers."alertPrice", 
+      triggers."stockId",
+      triggers."category",
+      triggers."alertPrice",
       stocks.symbol,
-      stocks."companyName", 
-      users."userName", 
-      users."userEmail" 
-    FROM 
-      triggers 
-    JOIN stocks ON triggers."stockId" = stocks."stockId" 
+      stocks."companyName",
+      users."userName",
+      users."userEmail"
+    FROM
+      triggers
+    JOIN stocks ON triggers."stockId" = stocks."stockId"
     JOIN users ON users."userId" = stocks."userId";
     `;
     const result = await dbClient.query(sqlQuery);

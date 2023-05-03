@@ -92,6 +92,10 @@ module.exports = {
   addTriggerService: async (stockId, category, alertPrice) => {
     const dbClient = await dbConnPool.connect();
     try {
+      const isTriggerPresentDal = await stocksDal.isTriggerPresentDal(dbClient, stockId);
+      if (isTriggerPresentDal) {
+        throw new Error('CONFLICT');
+      }
       await stocksDal.addTriggerDal(dbClient, stockId, category, alertPrice);
     } finally {
       dbClient.release();

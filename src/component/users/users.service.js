@@ -37,7 +37,7 @@ module.exports = {
       const PAYLOAD = {
         ...user
       };
-      const accessToken = jwt.sign(PAYLOAD, accessTokenSecret, { expiresIn: '30m' });
+      const accessToken = jwt.sign(PAYLOAD, accessTokenSecret, { expiresIn: '24h' });
       const refreshToken = jwt.sign(PAYLOAD, refreshTokenSecret, { expiresIn: '7d' });
       refreshTokens.push(refreshToken);
       const response = {

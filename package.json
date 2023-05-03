@@ -5,7 +5,9 @@
   "scripts": {
     "start": "node ./bin/www",
     "lint": ".\\node_modules\\.bin\\eslint **/*.js",
-    "test": "mocha ./src/component/**/*.test.js",
+    "test": "nyc --reporter=text mocha --timeout 20000 --watch-extensions js './src/component/**/*.test.js' --exit",
+    "test:watch": "mocha --watch ./src/component/**/*.test.js",
+    "coverage": "nyc --reporter=text --reporter=lcov npm test",
     "docs": "swagger-jsdoc ./src/component/**/*.route.js -d docs/api/swaggerDef.js -o docs/api/openApiSpecs.json"
   },
   "dependencies": {
@@ -31,6 +33,7 @@
     "eslint-plugin-import": "^2.27.5",
     "husky": "^8.0.3",
     "mocha": "^10.2.0",
+    "nyc": "^15.1.0",
     "swagger-jsdoc": "^6.2.8"
   }
 }

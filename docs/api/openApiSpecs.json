@@ -378,7 +378,7 @@
         }
       }
     },
-    "/portfolio/stocks/deleteTrigger": {
+    "/portfolio/stocks/deleteTrigger{stockId}": {
       "delete": {
         "tags": [
           "Stocks"

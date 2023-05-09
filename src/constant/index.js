@@ -8,7 +8,7 @@ module.exports = {
     time: '0 */1 * * * *',
   },
   smtpEthernal: {
-    user: 'margret.dibbert71@ethereal.email',
-    pass: '6mfrteAxExt32V5Sum'
+    user: 'mae.lakin62@ethereal.email',
+    pass: 'bRkcZsdp14ryuph3gr'
   }
 };

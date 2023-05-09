@@ -13,5 +13,9 @@ module.exports = {
   serverPort: process.env.SERVER_PORT,
   accessTokenSecret: process.env.ACCESS_TOKEN_SECRET,
   refreshTokenSecret: process.env.REFRESH_TOKEN_SECRET,
-  apiKey: process.env.API_KEY
+  apiKey: process.env.API_KEY,
+  smtpEthernal: {
+    email: process.env.smtpEthernalMail,
+    password: process.env.smtpEthernalPassword
+  }
 };

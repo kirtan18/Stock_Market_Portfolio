@@ -1,7 +1,10 @@
 {
     "addTrigger": {
         "type": "object",
-        "required": "category alertPrice",
+        "required": [
+            "category", 
+            "alertPrice"
+        ],
         "properties": {
             "category": {
                 "type": "string",

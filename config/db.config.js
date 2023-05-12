@@ -13,7 +13,7 @@ const pool = new Pool({
   },
   // The maximum number of clients that the pool can contain.
   // If the requests for the client reach their max limit then new requests will receive an error.
-  max: 15,
+  max: 30,
   // when a client is returned to the pool
   // the pool starts a timer for the idleTimeoutMillis duration. If the client remains idle for
   // that duration, the pool closes the client and removes it from the pool.

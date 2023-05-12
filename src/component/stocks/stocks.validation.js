@@ -27,6 +27,11 @@ module.exports = {
       userId: Joi.number().required()
     }),
   },
+  getStockAnalysis: {
+    query: Joi.object({
+      symbol: Joi.string().required()
+    }),
+  },
   deleteStock: {
     query: Joi.object({
       symbol: Joi.string().required()

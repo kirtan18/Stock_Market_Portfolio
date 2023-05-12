@@ -13,7 +13,7 @@ const sendEmail = async () => {
 const createCronJob = (tm, task) => {
   const job = cron.schedule(tm, task, {
     scheduled: true,
-    timezone: 'Asia/Kolkata'
+    timezone: 'UTC'
   });
   return job;
 };

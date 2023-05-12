@@ -39,6 +39,15 @@ module.exports = {
       next(error);
     }
   },
+  getStockAnalysis: async (req, res, next) => {
+    const { symbol } = req.query;
+    try {
+      const responseBody = await stocksService.getStockAnalysisService(symbol);
+      res.status(200).json(responseBody);
+    } catch (error) {
+      next(error);
+    }
+  },
   deleteStock: async (req, res, next) => {
     const { symbol } = req.query;
     const { userId } = req.params;

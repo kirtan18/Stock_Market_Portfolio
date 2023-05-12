@@ -16,13 +16,13 @@
     }
   },
   "addStock": {
-      "type": "object",
-      "properties": {
-        "message": {
-          "type": "string",
-          "example": "Successfully New stock added"
-        }
+    "type": "object",
+    "properties": {
+      "message": {
+        "type": "string",
+        "example": "Successfully New stock added"
       }
+    }
   },
   "stock-chart": {
     "type": "array",
@@ -96,29 +96,61 @@
       }
     }
   },
-  "deleteStock": {
-    "type": "object",
+  "getStockAnalysis": {
+    "type": "array",
+    "items": {
+      "type": "object",
       "properties": {
-        "message": {
+        "10DayAverageTradingVolume": {
+          "type": "number",
+          "example": 0.00345
+        },
+        "3MonthAverageTradingVolume": {
+          "type": "number",
+          "example": 0.05289
+        },
+        "52WeekHigh": {
+          "type": "number",
+          "example": 10.62
+        },
+        "52WeekHighDate": {
           "type": "string",
-          "example": "Stock successfully deleted"
+          "example": "2023-02-07"
+        },
+        "52WeekLow": {
+          "type": "number",
+          "example": 9.94
+        },
+        "52WeekLowDate": {
+          "type": "string",
+          "example": "2022-09-16"
         }
       }
+    }
+  },
+  "deleteStock": {
+    "type": "object",
+    "properties": {
+      "message": {
+        "type": "string",
+        "example": "Stock successfully deleted"
+      }
+    }
   },
   "addTrigger": {
     "type": "object",
-      "properties": {
-        "message": {
-          "type": "string",
-          "example": "Successfully trigger added"
-        }
+    "properties": {
+      "message": {
+        "type": "string",
+        "example": "Successfully trigger added"
       }
+    }
   },
   "getTriggers": {
     "type": "array",
     "items": {
       "type": "object",
-      "properties":{
+      "properties": {
         "triggerId": {
           "type": "string",
           "example": "22"
@@ -153,15 +185,14 @@
         }
       }
     }
-
   },
   "deleteTrigger": {
     "type": "object",
-      "properties": {
-        "message": {
-          "type": "string",
-          "example": "Successfully Trigger Deleted"
-        }
+    "properties": {
+      "message": {
+        "type": "string",
+        "example": "Successfully Trigger Deleted"
       }
+    }
   }
 }

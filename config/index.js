@@ -14,6 +14,7 @@ module.exports = {
   accessTokenSecret: process.env.ACCESS_TOKEN_SECRET,
   refreshTokenSecret: process.env.REFRESH_TOKEN_SECRET,
   apiKey: process.env.API_KEY,
+  apiKeyExtra: process.env.API_KEY_EXTRA,
   smtpEthernal: {
     email: process.env.smtpEthernalMail,
     password: process.env.smtpEthernalPassword

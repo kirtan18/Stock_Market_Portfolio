@@ -178,6 +178,46 @@ router.route('/getStocks/:userId')
 
 /**
  * @swagger
+ * /portfolio/stocks/getStockAnalysis:
+ *   get:
+ *     tags:
+ *       - Stocks
+ *     summary: To return analysis stock
+ *     parameters:
+ *       - in: header
+ *         name: Authorization
+ *         schema:
+ *           type: string
+ *         required: true
+ *       - in: query
+ *         required: true
+ *         name: symbol
+ *         schema:
+ *           type: string
+ *           example: HMCA
+ *     responses:
+ *       200:
+ *         description: successful operation.
+ *         schema:
+ *           $ref: 'components/stocks/res.json#getStockAnalysis'
+ *       400:
+ *         description: Bad Request - validation error
+ *         schema:
+ *           $ref: 'components/errorContracts.json#/ValidationErrorResponse'
+ *       500:
+ *         description: Internal Server Error
+ *         schema:
+ *           $ref: 'components/errorContracts.json#/ErrorResponse'
+ */
+router.route('/getStockAnalysis')
+  .get(
+    auth,
+    validate(validation.getStockAnalysis),
+    stocksController.getStockAnalysis
+  );
+
+/**
+ * @swagger
  * /portfolio/stocks/deleteStock/{userId}:
  *   delete:
  *     tags:

@@ -5,10 +5,6 @@ module.exports = {
   },
   cronJobTime: {
     // Cronjob call api every 1 minute
-    time: '0 */1 * * * *',
+    time: '* * * * *',
   },
-  smtpEthernal: {
-    user: 'mae.lakin62@ethereal.email',
-    pass: 'bRkcZsdp14ryuph3gr'
-  }
 };

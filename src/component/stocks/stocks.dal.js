@@ -1,18 +1,4 @@
 module.exports = {
-  isStockPresentDal: async (dbClient, userId, symbol) => {
-    const sqlQuery = `
-    SELECT 
-      "userId", 
-      symbol 
-    FROM 
-      stocks 
-    WHERE 
-      "userId" = $1 AND symbol = $2
-    `;
-    const parameters = [userId, symbol];
-    const result = await dbClient.query(sqlQuery, parameters);
-    return result.rowCount;
-  },
   addStockDal: async (dbClient, columns) => {
     const sqlQuery = `
     INSERT INTO stocks(
@@ -66,6 +52,9 @@ module.exports = {
     `;
     const parameters = [userId, symbol];
     const result = await dbClient.query(sqlQuery, parameters);
+    if (!result.rowCount) {
+      throw new Error('USER_NOT_FOUND');
+    }
     return result.rows[0];
   },
 
@@ -101,19 +90,7 @@ module.exports = {
     const result = await dbClient.query(sqlQuery);
     return result.rows;
   },
-  isTriggerPresentDal: async (dbClient, stockId) => {
-    const sqlQuery = `
-    SELECT 
-       "stockId" 
-    FROM 
-       triggers 
-    WHERE 
-       "stockId" = $1
-  `;
-    const parameter = [stockId];
-    const result = await dbClient.query(sqlQuery, parameter);
-    return result.rowCount;
-  },
+
   deleteTriggerDal: async (dbClient, stockId) => {
     const sqlQuery = `
     DELETE FROM 
@@ -123,6 +100,9 @@ module.exports = {
     `;
     const parameter = [stockId];
     const result = await dbClient.query(sqlQuery, parameter);
+    if (!result.rowCount) {
+      throw new Error('USER_NOT_FOUND');
+    }
     return result.rows;
   }
 };

@@ -1,6 +1,6 @@
 const stocksDal = require('./stocks.dal');
 const { dbConnPool } = require('../../../config/db.config');
-const { apiKey } = require('../../../config/index');
+const { apiKey, apiKeyExtra } = require('../../../config/index');
 const helper = require('../../helper/index');
 
 module.exports = {
@@ -36,12 +36,7 @@ module.exports = {
       const columns = {
         userId, symbol, companyName, price, open, high, low
       };
-      const isStockPresent = await stocksDal.isStockPresentDal(dbClient, userId, symbol);
-      if (isStockPresent) {
-        throw new Error('CONFLICT');
-      }
-      const result = await stocksDal.addStockDal(dbClient, columns);
-      return result;
+      await stocksDal.addStockDal(dbClient, columns);
     } finally {
       dbClient.release();
     }
@@ -76,13 +71,29 @@ module.exports = {
     }
   },
 
+  getStockAnalysisService: async (symbol) => {
+    const URL = `https://finnhub.io/api/v1/stock/metric?symbol=${symbol}&metric=all&token=${apiKeyExtra}`;
+    const response = await fetch(URL);
+    const data = await response.json();
+    if (!data) {
+      throw new Error('NOT_FOUND');
+    }
+    const storeData = [];
+    const temp = {
+      '10DayAverageTradingVolume': data.metric['10DayAverageTradingVolume'],
+      '3MonthAverageTradingVolume': data.metric['3MonthAverageTradingVolume'],
+      '52WeekHigh': data.metric['52WeekHigh'],
+      '52WeekHighDate': data.metric['52WeekHighDate'],
+      '52WeekLow': data.metric['52WeekLow'],
+      '52WeekLowDate': data.metric['52WeekLowDate']
+    };
+    storeData.push(temp);
+    return storeData;
+  },
+
   deleteStockService: async (userId, symbol) => {
     const dbClient = await dbConnPool.connect();
     try {
-      const isStockPresent = await stocksDal.isStockPresentDal(dbClient, userId, symbol);
-      if (!isStockPresent) {
-        throw new Error('USER_NOT_FOUND');
-      }
       await stocksDal.deleteStockDal(dbClient, userId, symbol);
     } finally {
       dbClient.release();
@@ -92,10 +103,6 @@ module.exports = {
   addTriggerService: async (stockId, category, alertPrice) => {
     const dbClient = await dbConnPool.connect();
     try {
-      const isTriggerPresentDal = await stocksDal.isTriggerPresentDal(dbClient, stockId);
-      if (isTriggerPresentDal) {
-        throw new Error('CONFLICT');
-      }
       await stocksDal.addTriggerDal(dbClient, stockId, category, alertPrice);
     } finally {
       dbClient.release();
@@ -146,10 +153,6 @@ module.exports = {
   deleteTriggerService: async (stockId) => {
     const dbClient = await dbConnPool.connect();
     try {
-      const isTriggerPresent = await stocksDal.isTriggerPresentDal(dbClient, stockId);
-      if (!isTriggerPresent) {
-        throw new Error('USER_NOT_FOUND');
-      }
       await stocksDal.deleteTriggerDal(dbClient, stockId);
     } finally {
       dbClient.release();

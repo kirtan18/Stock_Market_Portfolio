@@ -1,8 +1,8 @@
 module.exports = {
   info: {
-    title: 'Trend Finder Service',
+    title: 'Stock Market Service',
     version: '0.0.1',
-    description: 'Trend Finder API documentation',
+    description: 'Stock Market API documentation',
     termsOfService: 'https://zuru.tech/terms',
     contact: {
       email: 'apiteam@zuru.tech',
@@ -12,11 +12,10 @@ module.exports = {
       url: 'https://zuru.tech/Dreamcatcher/licenses/LICENSE.html',
     },
   },
-  host: 'localhost:3002',
-  // host: 'localhost:7778',
+  host: 'localhost:8000',
   basePath: '/',
-  apis: [ './src/component/**/*.route.js' ],
-  schemes: [ 'http' ],
-  consumes: [ 'application/json' ],
-  produces: [ 'application/json' ],
+  apis: ['./src/component/**/*.route.js'],
+  schemes: ['http'],
+  consumes: ['application/json'],
+  produces: ['application/json'],
 };

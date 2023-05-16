@@ -8,10 +8,10 @@ Make sure you have installed all of the following prerequisites on your machine:
 
 ## Generate API_KEY
 - Alpha Vantage - [Create API KEY](https://www.alphavantage.co/)
--- Get Symbol - [API](https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=tesco&apikey=demo)
--- Get Stock Data - [API](https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=IBM&apikey=demo)
--- Get Stock History - [API](https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=IBM&apikey=demo)
--- Stock Analysis - [API](https://finnhub.io/docs/api/company-basic-financials)
+- Get Symbol - [API](https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=tesco&apikey=demo)
+- Get Stock Data - [API](https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=IBM&apikey=demo)
+- Get Stock History - [API](https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=IBM&apikey=demo)
+- Stock Analysis - [API](https://finnhub.io/docs/api/company-basic-financials)
 
 ## Environment Variables
 To run this project, you will need to add the environment variables which is listed in .env.example file to your .env file, which will be placed in the .config/ directory.

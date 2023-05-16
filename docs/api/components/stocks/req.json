@@ -2,27 +2,24 @@
     "addTrigger": {
         "type": "object",
         "required": [
-            "category", 
+            "category",
             "alertPrice"
         ],
         "properties": {
             "category": {
                 "type": "string",
-                "enum": [
-                    "Low",
-                    "High"
-                ]
+                "enum": ["High", "Low"]
+            },
+            "alertPrice": {
+                "type": "integer",
+                "example": 130
             }
-        },
-        "alertPrice": {
-            "type": "integer",
-            "example": 130
         }
     },
     "addStock": {
         "type": "object",
         "required": [
-          "companyName"
+            "companyName"
         ],
         "properties": {
             "companyName": {

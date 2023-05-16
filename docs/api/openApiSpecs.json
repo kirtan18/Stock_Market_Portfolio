@@ -75,7 +75,7 @@
         }
       }
     },
-    "/portfolio/stocks/addStock/{userId}": {
+    "/portfolio/stocks/addStock": {
       "post": {
         "tags": [
           "Stocks"
@@ -100,17 +100,9 @@
             }
           },
           {
-            "in": "path",
-            "required": true,
-            "name": "userId",
-            "schema": {
-              "type": "integer",
-              "example": 3
-            }
-          },
-          {
             "in": "body",
-            "name": "stock",
+            "required": true,
+            "name": "companyName",
             "schema": {
               "$ref": "components/stocks/req.json#addStock"
             }
@@ -185,7 +177,7 @@
         }
       }
     },
-    "/portfolio/stocks/getStocks/{userId}": {
+    "/portfolio/stocks/getStocks": {
       "get": {
         "tags": [
           "Stocks"
@@ -199,15 +191,6 @@
               "type": "string"
             },
             "required": true
-          },
-          {
-            "in": "path",
-            "required": true,
-            "name": "userId",
-            "schema": {
-              "type": "integer",
-              "example": 3
-            }
           }
         ],
         "responses": {
@@ -279,7 +262,7 @@
         }
       }
     },
-    "/portfolio/stocks/deleteStock/{userId}": {
+    "/portfolio/stocks/deleteStock": {
       "delete": {
         "tags": [
           "Stocks"
@@ -293,15 +276,6 @@
               "type": "string"
             },
             "required": true
-          },
-          {
-            "in": "path",
-            "required": true,
-            "name": "userId",
-            "schema": {
-              "type": "integer",
-              "example": 3
-            }
           },
           {
             "in": "query",
@@ -361,8 +335,11 @@
           },
           {
             "in": "body",
-            "schema": null,
-            "$ref": "components/stocks/req.json#addTrigger"
+            "required": true,
+            "name": "body",
+            "schema": {
+              "$ref": "components/stocks/req.json#addTrigger"
+            }
           }
         ],
         "responses": {

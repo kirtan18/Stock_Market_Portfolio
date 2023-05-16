@@ -12,7 +12,7 @@ module.exports = {
   },
   addStock: async (req, res, next) => {
     const { symbol } = req.query;
-    const { userId } = req.params;
+    const { userId } = req.user;
     const { companyName } = req.body;
     try {
       await stocksService.addStockService(userId, symbol, companyName);
@@ -31,7 +31,7 @@ module.exports = {
     }
   },
   getStocks: async (req, res, next) => {
-    const { userId } = req.params;
+    const { userId } = req.user;
     try {
       const responseBody = await stocksService.getStocksService(userId);
       res.status(200).json(responseBody);
@@ -50,7 +50,7 @@ module.exports = {
   },
   deleteStock: async (req, res, next) => {
     const { symbol } = req.query;
-    const { userId } = req.params;
+    const { userId } = req.user;
     try {
       await stocksService.deleteStockService(userId, symbol);
       res.status(200).json({ message: 'Stock successfully deleted' });

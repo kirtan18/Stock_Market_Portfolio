@@ -48,7 +48,7 @@ router.route('/searchStock')
 
 /**
  * @swagger
- * /portfolio/stocks/addStock/{userId}:
+ * /portfolio/stocks/addStock:
  *   post:
  *     tags:
  *       - Stocks
@@ -65,14 +65,9 @@ router.route('/searchStock')
  *         schema:
  *           type: string
  *           example: AFISX
- *       - in: path
- *         required: true
- *         name: userId
- *         schema:
- *           type: integer
- *           example: 3
  *       - in: body
- *         name: stock
+ *         required: true
+ *         name: companyName
  *         schema:
  *           $ref: 'components/stocks/req.json#addStock'
  *     responses:
@@ -89,7 +84,7 @@ router.route('/searchStock')
  *         schema:
  *           $ref: 'components/errorContracts.json#/ErrorResponse'
  */
-router.route('/addStock/:userId')
+router.route('/addStock')
   .post(
     auth,
     validate(validation.addStock),
@@ -138,7 +133,7 @@ router.route('/stock-chart')
 
 /**
  * @swagger
- * /portfolio/stocks/getStocks/{userId}:
+ * /portfolio/stocks/getStocks:
  *   get:
  *     tags:
  *       - Stocks
@@ -149,12 +144,6 @@ router.route('/stock-chart')
  *         schema:
  *           type: string
  *         required: true
- *       - in: path
- *         required: true
- *         name: userId
- *         schema:
- *           type: integer
- *           example: 3
  *     responses:
  *       200:
  *         description: successful operation.
@@ -169,10 +158,9 @@ router.route('/stock-chart')
  *         schema:
  *           $ref: 'components/errorContracts.json#/ErrorResponse'
  */
-router.route('/getStocks/:userId')
+router.route('/getStocks')
   .get(
     auth,
-    validate(validation.getStocks),
     stocksController.getStocks
   );
 
@@ -218,7 +206,7 @@ router.route('/getStockAnalysis')
 
 /**
  * @swagger
- * /portfolio/stocks/deleteStock/{userId}:
+ * /portfolio/stocks/deleteStock:
  *   delete:
  *     tags:
  *       - Stocks
@@ -229,12 +217,6 @@ router.route('/getStockAnalysis')
  *         schema:
  *           type: string
  *         required: true
- *       - in: path
- *         required: true
- *         name: userId
- *         schema:
- *           type: integer
- *           example: 3
  *       - in: query
  *         required: true
  *         name: symbol
@@ -255,7 +237,7 @@ router.route('/getStockAnalysis')
  *         schema:
  *           $ref: 'components/errorContracts.json#/ErrorResponse'
  */
-router.route('/deleteStock/:userId')
+router.route('/deleteStock')
   .delete(
     auth,
     validate(validation.deleteStock),
@@ -282,8 +264,10 @@ router.route('/deleteStock/:userId')
  *           type: integer
  *           example: 3
  *       - in: body
+ *         required: true
+ *         name: body
  *         schema:
- *         $ref: 'components/stocks/req.json#addTrigger'
+ *           $ref: 'components/stocks/req.json#addTrigger'
  *     responses:
  *       200:
  *         description: successful operation.

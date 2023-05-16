@@ -10,9 +10,6 @@ module.exports = {
     query: Joi.object({
       symbol: Joi.string().required()
     }),
-    params: Joi.object({
-      userId: Joi.number().required()
-    }),
     body: Joi.object({
       companyName: Joi.string().required()
     })
@@ -22,11 +19,6 @@ module.exports = {
       symbol: Joi.string().required()
     })
   },
-  getStocks: {
-    params: Joi.object({
-      userId: Joi.number().required()
-    }),
-  },
   getStockAnalysis: {
     query: Joi.object({
       symbol: Joi.string().required()
@@ -35,9 +27,6 @@ module.exports = {
   deleteStock: {
     query: Joi.object({
       symbol: Joi.string().required()
-    }),
-    params: Joi.object({
-      userId: Joi.number().required()
     }),
   },
   addTrigger: {

@@ -41,19 +41,9 @@
     "token": {
         "type": "object",
         "required":[
-            "userName", 
-            "userEmail", 
             "refreshtoken"
         ],
         "properties": {
-            "userName": {
-                "type": "string",
-                "example": "secondUser"
-            },
-            "userEmail": {
-                "type": "string",
-                "example": "second@gmail.com"
-            },
             "refreshtoken": {
                 "type": "string",
                 "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI3"

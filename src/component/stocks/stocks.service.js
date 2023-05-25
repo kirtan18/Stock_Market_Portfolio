@@ -3,6 +3,43 @@ const { dbConnPool } = require('../../../config/db.config');
 const { apiKey, apiKeyExtra } = require('../../../config/index');
 const helper = require('../../helper/index');
 
+const getDataFromTimeSeries = (timeSeries) => {
+  const storeData = [];
+  Object.keys(timeSeries).forEach(date => {
+    const temp = { date, open: timeSeries[date]['1. open'], close: timeSeries[date]['4. close'] };
+    storeData.push(temp);
+  });
+  return storeData;
+};
+
+const getSymbolName = (data) => data['Meta Data']['2. Symbol'];
+
+const getTimeSeries = (data) => data['Time Series (Daily)'];
+
+const getSymbolAndName = (data) => {
+  const result = data.bestMatches.map(item => ({
+    symbol: item['1. symbol'],
+    companyName: item['2. name']
+  }));
+  return result;
+};
+
+const getStockAnalysisResponse = (data) => {
+  const storeData = [];
+  const temp = {
+    '10DayAverageTradingVolume': data.metric['10DayAverageTradingVolume'],
+    '3MonthAverageTradingVolume': data.metric['3MonthAverageTradingVolume'],
+    '52WeekHigh': data.metric['52WeekHigh'],
+    '52WeekHighDate': data.metric['52WeekHighDate'],
+    '52WeekLow': data.metric['52WeekLow'],
+    '52WeekLowDate': data.metric['52WeekLowDate']
+  };
+  storeData.push(temp);
+  return storeData;
+};
+
+const getCurrentStockPrice = (data) => Math.round(Number(data['Global Quote']['05. price']));
+
 module.exports = {
   searchStockService: async (symbol) => {
     const URL = `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${symbol}&apikey=${apiKey}`;
@@ -11,11 +48,7 @@ module.exports = {
     if (!data) {
       throw new Error('NOT_FOUND');
     }
-    const result = data.bestMatches.map(item => ({
-      symbol: item['1. symbol'],
-      companyName: item['2. name']
-    }));
-
+    const result = getSymbolAndName(data);
     return result;
   },
 
@@ -49,14 +82,9 @@ module.exports = {
     if (!data) {
       throw new Error('NOT_FOUND');
     }
-    const storeData = [];
-    const symbolName = data['Meta Data']['2. Symbol'];
-    const timeSeries = data['Time Series (Daily)'];
-
-    Object.keys(timeSeries).forEach(date => {
-      const temp = { date, open: timeSeries[date]['1. open'], close: timeSeries[date]['4. close'] };
-      storeData.push(temp);
-    });
+    const symbolName = getSymbolName(data);
+    const timeSeries = getTimeSeries(data);
+    const storeData = getDataFromTimeSeries(timeSeries);
     const result = [{ symbolName, dateWise: storeData }];
     return result;
   },
@@ -78,17 +106,8 @@ module.exports = {
     if (!data) {
       throw new Error('NOT_FOUND');
     }
-    const storeData = [];
-    const temp = {
-      '10DayAverageTradingVolume': data.metric['10DayAverageTradingVolume'],
-      '3MonthAverageTradingVolume': data.metric['3MonthAverageTradingVolume'],
-      '52WeekHigh': data.metric['52WeekHigh'],
-      '52WeekHighDate': data.metric['52WeekHighDate'],
-      '52WeekLow': data.metric['52WeekLow'],
-      '52WeekLowDate': data.metric['52WeekLowDate']
-    };
-    storeData.push(temp);
-    return storeData;
+    const result = getStockAnalysisResponse(data);
+    return result;
   },
 
   deleteStockService: async (userId, symbol) => {
@@ -131,7 +150,7 @@ module.exports = {
           const URL = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=${apiKey}`;
           const response = await fetch(URL);
           const data = await response.json();
-          const currentStockPrice = Math.round(Number(data['Global Quote']['05. price']));
+          const currentStockPrice = getCurrentStockPrice(data);
           const result = await helper.checkPrice(
             userName,
             userEmail,

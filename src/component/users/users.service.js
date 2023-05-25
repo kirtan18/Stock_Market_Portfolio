@@ -9,8 +9,6 @@ const { sendMailForGetToken } = require('../../helper/index');
 
 const saltRounds = 13;
 
-const refreshTokens = [];
-
 module.exports = {
   registerService: async (userName, userEmail, userPassword) => {
     const dbClient = await dbConnPool.connect();
@@ -39,7 +37,6 @@ module.exports = {
       };
       const accessToken = jwt.sign(PAYLOAD, accessTokenSecret, { expiresIn: '24h' });
       const refreshToken = jwt.sign(PAYLOAD, refreshTokenSecret, { expiresIn: '7d' });
-      refreshTokens.push(refreshToken);
       const response = {
         status: 'Logged in',
         token: accessToken,
@@ -51,25 +48,27 @@ module.exports = {
     }
   },
 
-  getTokenService: async (userName, userEmail, refreshtoken) => {
+  getTokenService: async (refreshToken) => {
     const dbClient = await dbConnPool.connect();
     try {
-      const user = await usersDal.getUserDal(dbClient, userEmail);
+      let tokenUser;
+      jwt.verify(refreshToken, refreshTokenSecret, (err, decoded) => {
+        if (err) {
+          throw new Error('UNAUTHORIZED');
+        }
+        tokenUser = decoded;
+      });
+      const user = await usersDal.getUserDal(dbClient, tokenUser.userEmail);
       if (!user) {
         throw new Error('USER_NOT_FOUND');
       }
-      if (!refreshtoken && !refreshTokens.includes(refreshtoken)) {
-        throw new Error('UNAUTHORIZED');
-      }
       const PAYLOAD = {
-        userName,
-        userEmail
+        ...user
       };
-      const accessToken = jwt.sign(PAYLOAD, accessTokenSecret, { expiresIn: '30m' });
-      const response = {
-        token: accessToken
+      const accessToken = jwt.sign(PAYLOAD, accessTokenSecret, { expiresIn: '24h' });
+      return {
+        accessToken,
       };
-      return response;
     } finally {
       dbClient.release();
     }

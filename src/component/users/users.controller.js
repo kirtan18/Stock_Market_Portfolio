@@ -24,8 +24,8 @@ module.exports = {
 
   getToken: async (req, res, next) => {
     try {
-      const { userName, userEmail, refreshtoken } = req.body;
-      const responseBody = await usersService.getTokenService(userName, userEmail, refreshtoken);
+      const { refreshToken } = req.body;
+      const responseBody = await usersService.getTokenService(refreshToken);
       res.status(200).json(responseBody);
     } catch (error) {
       next(error);

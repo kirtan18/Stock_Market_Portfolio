@@ -7,6 +7,8 @@ const { dbConnPool } = require('../../../config/db.config');
 const { accessTokenSecret, refreshTokenSecret } = require('../../../config/index');
 const { sendMailForGetToken } = require('../../helper/index');
 
+const { blockListTokenMap, blockListAccessToken } = require('../../middleware/auth');
+
 const saltRounds = 13;
 
 module.exports = {
@@ -37,6 +39,7 @@ module.exports = {
       };
       const accessToken = jwt.sign(PAYLOAD, accessTokenSecret, { expiresIn: '24h' });
       const refreshToken = jwt.sign(PAYLOAD, refreshTokenSecret, { expiresIn: '7d' });
+      blockListTokenMap.set(user.userId, refreshToken);
       const response = {
         status: 'Logged in',
         token: accessToken,
@@ -58,6 +61,10 @@ module.exports = {
         }
         tokenUser = decoded;
       });
+      const { userId } = tokenUser;
+      if (!blockListTokenMap.has(userId)) {
+        throw new Error('FORBIDDEN');
+      }
       const user = await usersDal.getUserDal(dbClient, tokenUser.userEmail);
       if (!user) {
         throw new Error('USER_NOT_FOUND');
@@ -74,12 +81,14 @@ module.exports = {
     }
   },
 
-  logoutUserService: async (token) => {
-    jwt.sign(token, '', { expiresIn: 1 }, (logout, err) => {
-      if (err) {
-        throw new Error(err);
-      }
-    });
+  logoutUserService: async (token, userId) => {
+    blockListTokenMap.delete(userId);
+    blockListAccessToken.add(token);
+    // jwt.sign(token, '', { expiresIn: '1' }, (logout, err) => {
+    //   if (err) {
+    //     throw new Error(err);
+    //   }
+    // });
   },
 
   forgotPasswordService: async (userEmail) => {
@@ -119,5 +128,5 @@ module.exports = {
     } finally {
       dbClient.release();
     }
-  }
+  },
 };

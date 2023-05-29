@@ -35,7 +35,8 @@ module.exports = {
   logoutUser: async (req, res, next) => {
     try {
       const token = req.headers.authorization;
-      await usersService.logoutUserService(token);
+      const { userId } = req.user;
+      await usersService.logoutUserService(token, userId);
       res.status(200).json({ message: 'You have been Logged Out' });
     } catch (error) {
       next(error);

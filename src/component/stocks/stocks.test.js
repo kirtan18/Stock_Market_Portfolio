@@ -77,7 +77,7 @@ describe('Testing stocks routes', () => {
       it(
         'POST /portfolio/stocks/addStock should return validation error',
         async () => chai.request(app)
-          .post('/portfolio/stocks/addStock/xyz')
+          .post('/portfolio/stocks/addStock?sym')
           .set('Authorization', token)
           .send(stockModel)
           .then((res) => {
@@ -91,7 +91,7 @@ describe('Testing stocks routes', () => {
       it(
         'POST /portfolio/stocks/addStock should return Invalid Authentication error',
         async () => chai.request(app)
-          .post('/portfolio/stocks/addStock/11?symbol=AMC')
+          .post('/portfolio/stocks/addStock?symbol=AMC')
           .set('Authorization', `${token}12`)
           .send(stockModel)
           .then((res) => {
@@ -104,7 +104,7 @@ describe('Testing stocks routes', () => {
       it(
         'POST /portfolio/stocks/addStock should successfully add stock',
         async () => chai.request(app)
-          .post('/portfolio/stocks/addStock/11?symbol=AMC')
+          .post('/portfolio/stocks/addStock?symbol=AMC')
           .set('Authorization', token)
           .send(stockModel)
           .then((res) => {
@@ -116,7 +116,7 @@ describe('Testing stocks routes', () => {
       it(
         'POST /portfolio/stocks/addStock should return conflict error',
         async () => chai.request(app)
-          .post('/portfolio/stocks/addStock/11?symbol=AMC')
+          .post('/portfolio/stocks/addStock?symbol=AMC')
           .set('Authorization', token)
           .send(stockModel)
           .then((res) => {
@@ -161,22 +161,9 @@ describe('Testing stocks routes', () => {
 
     describe('Testing /portfolio/stocks/getStocks', () => {
       it(
-        'GET /portfolio/stocks/getStocks should successfully return validation error',
-        async () => chai.request(app)
-          .get('/portfolio/stocks/getStocks/abc')
-          .set('Authorization', token)
-          .then((res) => {
-            expect(res.status).to.equal(400);
-            expect(res.body).to.have.property('code');
-            expect(res.body).to.have.property('message');
-            expect(res.body).to.be.an('object');
-          })
-      );
-
-      it(
         'GET /portfolio/stocks/getStocks should return Invalid Authentication error.',
         async () => chai.request(app)
-          .get('/portfolio/stocks/getStocks/11')
+          .get('/portfolio/stocks/getStocks')
           .set('Authorization', `${token}12`)
           .then((res) => {
             expect(res.status).to.equal(401);
@@ -188,7 +175,7 @@ describe('Testing stocks routes', () => {
       it(
         'GET /portfolio/stocks/getStocks should successfully return stocks',
         async () => chai.request(app)
-          .get('/portfolio/stocks/getStocks/11')
+          .get('/portfolio/stocks/getStocks')
           .set('Authorization', token)
           .then((res) => {
             expect(res.status).to.equal(200);
@@ -310,7 +297,7 @@ describe('Testing stocks routes', () => {
       it(
         'DELETE /portfolio/stocks/deleteStock should successfully return validation error',
         async () => chai.request(app)
-          .delete('/portfolio/stocks/deleteStock/abc?')
+          .delete('/portfolio/stocks/deleteStock?')
           .set('Authorization', token)
           .then((res) => {
             expect(res.status).to.equal(400);
@@ -323,7 +310,7 @@ describe('Testing stocks routes', () => {
       it(
         'DELETE /portfolio/stocks/deleteStock should return Invalid Authentication error.',
         async () => chai.request(app)
-          .delete('/portfolio/stocks/deleteStock/11?symbol=AMOVF')
+          .delete('/portfolio/stocks/deleteStock?symbol=AMOVF')
           .set('Authorization', `${token}12`)
           .then((res) => {
             expect(res.status).to.equal(401);
@@ -335,7 +322,7 @@ describe('Testing stocks routes', () => {
       it(
         'DELETE /portfolio/stocks/deleteStock should return Not Found error',
         async () => chai.request(app)
-          .delete('/portfolio/stocks/deleteStock/150?symbol=XYZ')
+          .delete('/portfolio/stocks/deleteStock?symbol=$$$')
           .set('Authorization', token)
           .then((res) => {
             expect(res.status).to.equal(404);
@@ -347,12 +334,50 @@ describe('Testing stocks routes', () => {
       it(
         'DELETE /portfolio/stocks/deleteStock should successfully Delete stock',
         async () => chai.request(app)
-          .delete('/portfolio/stocks/deleteStock/11?symbol=AMC')
+          .delete('/portfolio/stocks/deleteStock?symbol=AMC')
           .set('Authorization', token)
           .then((res) => {
             expect(res.status).to.equal(200);
             expect(res.body).to.have.property('message');
             expect(res.body).to.be.an('object');
+          })
+      );
+    });
+
+    describe('Testing /portfolio/stocks/getStockAnalysis', () => {
+      it(
+        'GET /portfolio/stocks/getStockAnalysis should successfully return validation error',
+        async () => chai.request(app)
+          .get('/portfolio/stocks/getStockAnalysis?sym=')
+          .set('Authorization', token)
+          .then((res) => {
+            expect(res.status).to.equal(400);
+            expect(res.body).to.have.property('code');
+            expect(res.body).to.have.property('message');
+            expect(res.body).to.be.an('object');
+          })
+      );
+
+      it(
+        'GET /portfolio/stocks/getStockAnalysis should return Invalid Authentication error.',
+        async () => chai.request(app)
+          .get('/portfolio/stocks/getStockAnalysis?symbol=HMAC')
+          .set('Authorization', `${token}12`)
+          .then((res) => {
+            expect(res.status).to.equal(401);
+            expect(res.body).to.have.property('code');
+            expect(res.body).to.have.property('message');
+          })
+      );
+
+      it(
+        'GET /portfolio/stocks/getStockAnalysis should successfully return Analysis Stock detail',
+        async () => chai.request(app)
+          .get('/portfolio/stocks/getStockAnalysis')
+          .set('Authorization', token)
+          .then((res) => {
+            expect(res.status).to.equal(200);
+            expect(res.body).to.be.an('array');
           })
       );
     });

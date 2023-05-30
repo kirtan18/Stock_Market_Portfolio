@@ -1,9 +1,10 @@
 {
 	"info": {
-		"_postman_id": "bbc6daac-59ef-4389-aeef-4544c04e04ac",
+		"_postman_id": "3b18321d-5ff0-4c70-b8be-cddf4228d729",
 		"name": "stock Portfolio",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "25502085"
+		"_exporter_id": "15328125",
+		"_collection_link": "https://blue-astronaut-820480.postman.co/workspace/Api's~e1165bf9-80c1-4eb6-8826-17568e1fafb7/collection/15328125-3b18321d-5ff0-4c70-b8be-cddf4228d729?action=share&creator=15328125&source=collection_link"
 	},
 	"item": [
 		{
@@ -45,15 +46,6 @@
 							"originalRequest": {
 								"method": "GET",
 								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n   \"userEmail\": \"second23@gmail.com\",\r\n   \"userPassword\": \"second@123\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
 								"url": {
 									"raw": "localhost:8000/portfolio/users/login",
 									"host": [

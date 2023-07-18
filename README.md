@@ -1,5 +1,5 @@
 # Stock_market_portfolio
-## Project Vedio Link: [Watch video](https://drive.google.com/file/d/177Dgu7l4gUuPpRQUYW2p8abttVOqUPTa/view?usp=sharing)
+## Project Video Link: [Watch video](https://drive.google.com/file/d/177Dgu7l4gUuPpRQUYW2p8abttVOqUPTa/view?usp=sharing)
 ## Prerequisites
 
 Make sure you have installed all of the following prerequisites on your machine:
